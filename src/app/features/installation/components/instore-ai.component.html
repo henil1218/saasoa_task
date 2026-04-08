@@ -1,0 +1,150 @@
+<div class="instore-container">
+  <div class="form-wrapper">
+    <div class="form-header">
+      <h1>Store Installation Setup</h1>
+      <p class="subtitle">Complete your store information</p>
+    </div>
+
+    <form class="installation-form" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2>Store Information</h2>
+        
+        <div class="form-group">
+          <label for="storeName">1. Store Name *</label>
+          <input
+            id="storeName"
+            type="text"
+            [(ngModel)]="formData.storeName"
+            name="storeName"
+            placeholder="Enter store name"
+            required
+          />
+          <div class="char-count">0/255</div>
+        </div>
+
+        <div class="form-group">
+          <label for="streetAddress">2. Street Address *</label>
+          <input
+            id="streetAddress"
+            type="text"
+            [(ngModel)]="formData.streetAddress"
+            name="streetAddress"
+            placeholder="Enter street address"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">3. City *</label>
+            <input
+              id="city"
+              type="text"
+              [(ngModel)]="formData.city"
+              name="city"
+              placeholder="City"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="state">4. State *</label>
+            <input
+              id="state"
+              type="text"
+              [(ngModel)]="formData.state"
+              name="state"
+              placeholder="State"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="zip">5. Zip *</label>
+            <input
+              id="zip"
+              type="text"
+              [(ngModel)]="formData.zip"
+              name="zip"
+              placeholder="Zip code"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Contact Information</h2>
+        
+        <div class="form-group">
+          <label for="contactName">6. Store Contact Name *</label>
+          <input
+            id="contactName"
+            type="text"
+            [(ngModel)]="formData.contactName"
+            name="contactName"
+            placeholder="Full name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="contactPhone">7. Store Contact Phone *</label>
+          <input
+            id="contactPhone"
+            type="tel"
+            [(ngModel)]="formData.contactPhone"
+            name="contactPhone"
+            placeholder="(123) 456-7890"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="contactEmail">8. Store Contact Email *</label>
+          <input
+            id="contactEmail"
+            type="email"
+            [(ngModel)]="formData.contactEmail"
+            name="contactEmail"
+            placeholder="email@example.com"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Additional Details</h2>
+        
+        <div class="form-group">
+          <label for="chainName">9. Chain Name</label>
+          <input
+            id="chainName"
+            type="text"
+            [(ngModel)]="formData.chainName"
+            name="chainName"
+            placeholder="Chain name (optional)"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="storeHours">10. Store Hours</label>
+          <textarea
+            id="storeHours"
+            [(ngModel)]="formData.storeHours"
+            name="storeHours"
+            placeholder="e.g., Mon-Fri: 9AM-5PM, Sat: 10AM-4PM"
+            rows="4"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="saveAsDraft()">
+          Save as Draft
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
