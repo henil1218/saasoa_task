@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface FormData {
   storeName: string;
@@ -23,6 +24,8 @@ interface FormData {
   styleUrl: './instore-ai.component.css'
 })
 export class InstoreAiComponent {
+  constructor(private router: Router) {}
+
   formData: FormData = {
     storeName: '',
     streetAddress: '',
@@ -48,8 +51,41 @@ export class InstoreAiComponent {
       return;
     }
 
-    // TODO: Send to API or service
-    alert('Form submitted successfully!');
+    // Zip Code Validation: Exactly 5 or 9 numbers, no words
+    const zipRegex = /^\d+$/;
+    if (!zipRegex.test(data.zip)) {
+       alert('Zip code must contain ONLY numbers.');
+       return;
+    }
+
+    // Phone Number Validation: Exactly 10 numbers
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(data.contactPhone)) {
+       alert('Phone number must be EXACTLY 10 digits without any spaces or special characters.');
+       return;
+    }
+
+    // Name and Location Validation: Only words, no numbers allowed
+    const wordsOnlyRegex = /^[A-Za-z\s]+$/;
+    if (!wordsOnlyRegex.test(data.city)) {
+       alert('City must contain only words, no numbers.');
+       return;
+    }
+    if (!wordsOnlyRegex.test(data.state)) {
+       alert('State must contain only words, no numbers.');
+       return;
+    }
+    if (!wordsOnlyRegex.test(data.contactName)) {
+       alert('Store Contact Name must contain only words, no numbers.');
+       return;
+    }
+    if (data.chainName && !wordsOnlyRegex.test(data.chainName)) {
+       alert('Chain Name must contain only words, no numbers.');
+       return;
+    }
+
+    // Navigate to second page
+    this.router.navigate(['/second-page']);
   }
 
   saveAsDraft() {

@@ -1,0 +1,175 @@
+<div class="instore-container">
+  <div class="form-wrapper">
+    <div class="form-header">
+      <h1>Installation Scoping Questionnaire</h1>
+      <p class="subtitle">IT and Network Readiness</p>
+    </div>
+
+    <form class="installation-form" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2>IT and Network Readiness</h2>
+        <p class="description-text">The next few questions are about your internet setup. Before you start this section, ask someone at your store who handles the internet or tech devices to help you answer the questions.</p>
+        
+        <!-- Q11: IT Person -->
+        <div class="form-group slide-down">
+          <label for="itPerson">11. Who is the IT person of your store? (Name, Phone #, Email Address) *</label>
+          <div class="field-note">Note: This person/company would NOT be Comcast, AT&T, or whoever you pay for your internet.<br><br>This would be an IT vendor, someone related to you, or yourself if you're in charge of IT/Support - whoever you call when your internet or computers stop working.</div>
+          <input
+            id="itPerson"
+            type="text"
+            [(ngModel)]="formData.itPerson"
+            name="itPerson"
+            placeholder="Type your answer here..."
+            required
+          />
+        </div>
+
+        <!-- Q12: Modem/Router Location -->
+        <div class="form-group slide-down">
+          <label for="routerLocation">12. This is a picture of a modem/router.  It's the device that grants internet to your store. Where is this internet box or router located in your store? *</label>
+          <div class="select-wrapper">
+            <select id="routerLocation" [(ngModel)]="formData.routerLocation" name="routerLocation" required class="form-select">
+              <option value="" disabled selected>Select an option</option>
+              <option value="Register/counter area">Register/counter area</option>
+              <option value="Back Office">Back Office</option>
+              <option value="Other">Other: (member can write in answer here)</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+        </div>
+
+        <!-- Q13: Internet Connection Type -->
+        <div class="form-group slide-down">
+          <label>13. How do devices connect to the internet at your store? *</label>
+          <div class="radio-group-vertical">
+            <label class="custom-radio">
+              <input type="radio" name="connectionType" value="cable" [(ngModel)]="formData.connectionType" required>
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">Through a cable connected to the internet box (ethernet)</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="connectionType" value="wifi" [(ngModel)]="formData.connectionType">
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">Through WiFi (wireless)</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="connectionType" value="both" [(ngModel)]="formData.connectionType">
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">Both</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- CONDITIONAL LOGIC FOR CABLE / BOTH -->
+        <ng-container *ngIf="formData.connectionType === 'cable' || formData.connectionType === 'both'">
+          
+          <!-- Q14 (Cable/Both): Cable Hole -->
+          <div class="form-group slide-down">
+            <label for="cableHole">14. This image is an example of what ethernet cables look like plugged in. Locate the internet box. Is there an empty cable hole that we can use to plug our own cable in? *</label>
+            <div class="select-wrapper">
+              <select id="cableHole" [(ngModel)]="formData.cableHole" name="cableHole" required class="form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="Yes">Yes, there is an empty cable hole for you to plug a cable in</option>
+                <option value="No">No, all the holes are used</option>
+                <option value="IDK">I don't know</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+          </div>
+
+          <!-- Q15 (Cable/Both -> Yes): Run 6ft Cable -->
+          <div class="form-group slide-down" *ngIf="formData.cableHole === 'Yes'">
+            <label>15. Can you run a 6 ft cable from your internet box to where the register will be?<br>Is there a clear path from your internet box (router) to the register without going through walls or across the whole store? *</label>
+            <div class="select-wrapper">
+              <select name="runCable" [(ngModel)]="formData.runCable" required class="form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="Yes">Yes, the cable can reach.</option>
+                <option value="No">No, the internet box is too far away.</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+          </div>
+
+          <!-- DEEP NESTED: Q16 (Run Cable -> No): Counter Hole -->
+          <div class="form-group slide-down" *ngIf="formData.cableHole === 'Yes' && formData.runCable === 'No'">
+            <label>16. Is there a cable hole that is part of the counter like this image? *</label>
+            <div class="select-wrapper">
+              <select name="counterHole" [(ngModel)]="formData.counterHole" required class="form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="Yes">Yes, there is a counter cable hole</option>
+                <option value="No">There's not a cable hole</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <!-- CONDITIONAL LOGIC FOR WIFI OR FALLBACK -->
+        <ng-container *ngIf="formData.connectionType === 'wifi' || formData.cableHole === 'No'">
+          
+          <!-- Alert for Fallback Route -->
+          <div class="form-group slide-down alert-info" *ngIf="formData.cableHole === 'No' && formData.connectionType !== 'wifi'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <p>If there are no available cable holes, you will need to gather the WiFi information.</p>
+          </div>
+
+          <!-- WiFi Q1 -->
+          <div class="form-group slide-down">
+            <label>{{formData.connectionType === 'wifi' ? '14' : '15'}}. When you open the WiFi setting on your phone, can you see your store’s WiFi in the list? *</label>
+            <div class="radio-group-vertical">
+              <label class="custom-radio">
+                <input type="radio" name="seeWifi" value="Yes" [(ngModel)]="formData.seeWifi">
+                <span class="radio-checkmark"></span>
+                <span class="radio-text">Yes, I can see it</span>
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="seeWifi" value="No" [(ngModel)]="formData.seeWifi">
+                <span class="radio-checkmark"></span>
+                <span class="radio-text">No, it doesn't show up</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- WiFi Q2 -->
+          <div class="form-group slide-down">
+            <label>{{formData.connectionType === 'wifi' ? '15' : '16'}}. What is your Wi-Fi name (SSID)? *</label>
+            <input
+              id="wifiName"
+              type="text"
+              [(ngModel)]="formData.wifiName"
+              name="wifiName"
+              placeholder="e.g. StoreGuestNetwork"
+            />
+          </div>
+        </ng-container>
+
+        <!-- 🔹 COMMON FINAL SECTION 🔹 -->
+        <div class="form-group slide-down" style="padding-top: 20px; border-top: 1px solid #ddd;" *ngIf="formData.connectionType !== ''">
+          <label>Final Question: Once you connect a phone or laptop to your Wi-Fi or via Ethernet, does it get internet access right away — without any technical/IT person having to set anything up? *</label>
+          <div class="select-wrapper">
+            <select name="internetRightAway" [(ngModel)]="formData.internetRightAway" class="form-select" required>
+              <option value="" disabled selected>Select an option</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary btn-back" (click)="goBack()">
+          Back
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="saveAsDraft()">
+          Save as Draft
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
