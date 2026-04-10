@@ -8,27 +8,26 @@
     <form class="installation-form" (ngSubmit)="onSubmit()">
       <div class="form-section">
         <h2>IT and Network Readiness</h2>
-        <p class="description-text">The next few questions are about your internet setup. Before you start this section, ask someone at your store who handles the internet or tech devices to help you answer the questions.</p>
-        
+        <p class="description-text">The next few questions are about your internet setup. Before you start this section,
+          ask someone at your store who handles the internet or tech devices to help you answer the questions.</p>
+
         <!-- Q11: IT Person -->
         <div class="form-group slide-down">
           <label for="itPerson">11. Who is the IT person of your store? (Name, Phone #, Email Address) *</label>
-          <div class="field-note">Note: This person/company would NOT be Comcast, AT&T, or whoever you pay for your internet.<br><br>This would be an IT vendor, someone related to you, or yourself if you're in charge of IT/Support - whoever you call when your internet or computers stop working.</div>
-          <input
-            id="itPerson"
-            type="text"
-            [(ngModel)]="formData.itPerson"
-            name="itPerson"
-            placeholder="Type your answer here..."
-            required
-          />
+          <div class="field-note">Note: This person/company would NOT be Comcast, AT&T, or whoever you pay for your
+            internet.<br><br>This would be an IT vendor, someone related to you, or yourself if you're in charge of
+            IT/Support - whoever you call when your internet or computers stop working.</div>
+          <input id="itPerson" type="text" [(ngModel)]="formData.itPerson" name="itPerson"
+            placeholder="Type your answer here..." required />
         </div>
 
         <!-- Q12: Modem/Router Location -->
         <div class="form-group slide-down">
-          <label for="routerLocation">12. This is a picture of a modem/router.  It's the device that grants internet to your store. Where is this internet box or router located in your store? *</label>
+          <label for="routerLocation">12. This is a picture of a modem/router. It's the device that grants internet to
+            your store. Where is this internet box or router located in your store? *</label>
           <div class="select-wrapper">
-            <select id="routerLocation" [(ngModel)]="formData.routerLocation" name="routerLocation" required class="form-select">
+            <select id="routerLocation" [(ngModel)]="formData.routerLocation" name="routerLocation" required
+              class="form-select">
               <option value="" disabled selected>Select an option</option>
               <option value="Register/counter area">Register/counter area</option>
               <option value="Back Office">Back Office</option>
@@ -40,7 +39,7 @@
 
         <!-- Q13: Internet Connection Type -->
         <div class="form-group slide-down">
-          <label>13. How do devices connect to the internet at your store? *</label>
+          <label>13. How do devices connect to the internet at your store?</label>
           <div class="radio-group-vertical">
             <label class="custom-radio">
               <input type="radio" name="connectionType" value="cable" [(ngModel)]="formData.connectionType" required>
@@ -62,16 +61,17 @@
 
         <!-- CONDITIONAL LOGIC FOR CABLE / BOTH -->
         <ng-container *ngIf="formData.connectionType === 'cable' || formData.connectionType === 'both'">
-          
+
           <!-- Q14 (Cable/Both): Cable Hole -->
           <div class="form-group slide-down">
-            <label for="cableHole">14. This image is an example of what ethernet cables look like plugged in. Locate the internet box. Is there an empty cable hole that we can use to plug our own cable in? *</label>
+            <label for="cableHole">14. This image is an example of what ethernet cables look like plugged in. Locate the
+              internet box. Is there an empty cable hole that we can use to plug our own cable in?</label>
             <div class="select-wrapper">
               <select id="cableHole" [(ngModel)]="formData.cableHole" name="cableHole" required class="form-select">
                 <option value="" disabled selected>Select an option</option>
                 <option value="Yes">Yes, there is an empty cable hole for you to plug a cable in</option>
                 <option value="No">No, all the holes are used</option>
-                <option value="IDK">I don't know</option>
+
               </select>
               <div class="select-arrow"></div>
             </div>
@@ -79,12 +79,14 @@
 
           <!-- Q15 (Cable/Both -> Yes): Run 6ft Cable -->
           <div class="form-group slide-down" *ngIf="formData.cableHole === 'Yes'">
-            <label>15. Can you run a 6 ft cable from your internet box to where the register will be?<br>Is there a clear path from your internet box (router) to the register without going through walls or across the whole store? *</label>
+            <label>15. Can you run a 6 ft cable from your internet box to where the register will be?</label>
+            <div class="field-subtext">Is there a clear path from your internet box (router) to the register without
+              going through walls or across the whole store?</div>
             <div class="select-wrapper">
               <select name="runCable" [(ngModel)]="formData.runCable" required class="form-select">
                 <option value="" disabled selected>Select an option</option>
-                <option value="Yes">Yes, the cable can reach.</option>
-                <option value="No">No, the internet box is too far away.</option>
+                <option value="Yes">Yes, the cable can reach from the internet box to the register</option>
+                <option value="No">No, the internet box is in a different room or area of the building</option>
               </select>
               <div class="select-arrow"></div>
             </div>
@@ -92,12 +94,14 @@
 
           <!-- DEEP NESTED: Q16 (Run Cable -> No): Counter Hole -->
           <div class="form-group slide-down" *ngIf="formData.cableHole === 'Yes' && formData.runCable === 'No'">
-            <label>16. Is there a cable hole that is part of the counter like this image? *</label>
+            <label>16. Is there a cable hole that is part of the counter like this image?</label>
             <div class="select-wrapper">
               <select name="counterHole" [(ngModel)]="formData.counterHole" required class="form-select">
                 <option value="" disabled selected>Select an option</option>
-                <option value="Yes">Yes, there is a counter cable hole</option>
-                <option value="No">There's not a cable hole</option>
+                <option value="Yes">There's a cable hole that's part of the counter</option>
+                <option value="Used">There's a cable hole that's part of the counter but the cable holes are all used
+                </option>
+                <option value="No">There's not a cable hole that's part of the counter</option>
               </select>
               <div class="select-arrow"></div>
             </div>
@@ -105,19 +109,29 @@
 
         </ng-container>
 
-        <!-- CONDITIONAL LOGIC FOR WIFI OR FALLBACK -->
-        <ng-container *ngIf="formData.connectionType === 'wifi' || formData.cableHole === 'No'">
-          
-          <!-- Alert for Fallback Route -->
-          <div class="form-group slide-down alert-info" *ngIf="formData.cableHole === 'No' && formData.connectionType !== 'wifi'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <p>If there are no available cable holes, you will need to gather the WiFi information.</p>
-          </div>
-
-          <!-- WiFi Q1 -->
+        <!-- WIFI FALLBACK ROUTE -->
+        <ng-container *ngIf="isWifiFallback">
+          <!-- Q: Transition to WiFi -->
           <div class="form-group slide-down">
-            <label>{{formData.connectionType === 'wifi' ? '14' : '15'}}. When you open the WiFi setting on your phone, can you see your store’s WiFi in the list? *</label>
-            <div class="radio-group-vertical">
+            <label>{{ qNum['wifiTransition'] }}. If there are no available cable holes or the internet box is too far
+              away, you will need to gather the WiFi information</label>
+            <div class="select-wrapper">
+              <select name="wifiTransition" [(ngModel)]="formData.wifiTransition" class="form-select" required>
+                <option value="" disabled selected>Select an option</option>
+                <option value="Continue">Continue to WiFi Information</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- WIFI QUESTIONS MAIN -->
+        <ng-container *ngIf="showWifiQuestions">
+          <!-- WiFi Q1 (seeWifi) -->
+          <div class="form-group slide-down">
+            <label>{{ qNum['seeWifi'] }}. When you open the WiFi setting on your phone, can you see your store’s WiFi in
+              the list?</label>
+            <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
               <label class="custom-radio">
                 <input type="radio" name="seeWifi" value="Yes" [(ngModel)]="formData.seeWifi">
                 <span class="radio-checkmark"></span>
@@ -131,30 +145,148 @@
             </div>
           </div>
 
-          <!-- WiFi Q2 -->
+          <!-- WiFi Q2 (wifiName) -->
           <div class="form-group slide-down">
-            <label>{{formData.connectionType === 'wifi' ? '15' : '16'}}. What is your Wi-Fi name (SSID)? *</label>
-            <input
-              id="wifiName"
-              type="text"
-              [(ngModel)]="formData.wifiName"
-              name="wifiName"
-              placeholder="e.g. StoreGuestNetwork"
-            />
+            <label>{{ qNum['wifiName'] }}. What is your Wi-Fi name (SSID)?</label>
+            <div class="select-wrapper">
+              <select name="wifiName" [(ngModel)]="formData.wifiName" class="form-select" required>
+                <option value="" disabled selected>Select an option</option>
+                <option value="*Member will type in their answer here">*Member will type in their answer here</option>
+                <option value="I don't know">I don't know</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+            <input *ngIf="formData.wifiName === '*Member will type in their answer here'" type="text"
+              name="customWifiName" [(ngModel)]="formData.customWifiName"
+              style="margin-top: 1rem; width: 100%; box-sizing: border-box; padding: 1rem 1.2rem; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 1rem;"
+              placeholder="Type Wi-Fi name here" required />
           </div>
+
+          <!-- WiFi Q3 (wifiPassword) -->
+          <div class="form-group slide-down" *ngIf="formData.wifiName !== 'I don\'t know'">
+            <label>{{ qNum['wifiPassword'] }}. What is your WiFi Password?</label>
+            <div class="select-wrapper">
+              <select name="wifiPassword" [(ngModel)]="formData.wifiPassword" class="form-select" required>
+                <option value="" disabled selected>Select an option</option>
+                <option value="*Member will type in their answer here">*Member will type in their answer here</option>
+                <option value="I don't know">I don't know</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+            <input *ngIf="formData.wifiPassword === '*Member will type in their answer here'" type="text"
+              name="customWifiPassword" [(ngModel)]="formData.customWifiPassword"
+              style="margin-top: 1rem; width: 100%; box-sizing: border-box; padding: 1rem 1.2rem; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 1rem;"
+              placeholder="Type Wi-Fi password here" required />
+          </div>
+
+          <!-- HELP FIND PASSWORD QUESTIONS -->
+          <ng-container *ngIf="formData.wifiName === 'I don\'t know' || formData.wifiPassword === 'I don\'t know'">
+            <div class="form-group slide-down">
+              <label>{{ qNum['findConnectedDevice'] }}. Can you find a phone, tablet or computer that is currently
+                connected to the WiFi?</label>
+              <div class="field-subtext"
+                style="font-style: normal; margin-bottom: 0.5rem; display: block; font-size: 0.95rem;">See image</div>
+              <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+                <label class="custom-radio">
+                  <input type="radio" name="findConnectedDevice" value="Yes" [(ngModel)]="formData.findConnectedDevice">
+                  <span class="radio-checkmark"></span>
+                  <span class="radio-text">Yes</span>
+                </label>
+                <label class="custom-radio">
+                  <input type="radio" name="findConnectedDevice" value="No" [(ngModel)]="formData.findConnectedDevice">
+                  <span class="radio-checkmark"></span>
+                  <span class="radio-text">No</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group slide-down" *ngIf="formData.findConnectedDevice === 'Yes'">
+              <label>{{ qNum['attemptFindPassword'] }}. Let's attempt to find your WiFi Password:</label>
+              <div class="field-subtext"
+                style="font-style: normal; color: #6a6f7d; margin-bottom: 0.8rem; display: block; font-size: 0.95rem; line-height: 1.6;">
+                Here are instructional videos depending on your device:<br><br>
+                Android: <a href="https://www.youtube.com/watch?v=J_B9XfajEjo" target="_blank"
+                  style="color: #0073ea; text-decoration: none;">https://www.youtube.com/watch?v=J_B9XfajEjo</a> (opens
+                in new tab)<br>
+                iPhone: <a href="https://www.youtube.com/watch?v=QDO9bLJdhpk" target="_blank"
+                  style="color: #0073ea; text-decoration: none;">https://www.youtube.com/watch?v=QDO9bLJdhpk</a> (opens
+                in new tab)<br>
+                (latest OS) <a href="https://www.youtube.com/watch?v=q67vhMc0YUM" target="_blank"
+                  style="color: #0073ea; text-decoration: none;">https://www.youtube.com/watch?v=q67vhMc0YUM</a> (opens
+                in new tab)<br>
+                Mac + Windows: <a href="https://www.youtube.com/watch?v=qGuOyVmVXDM" target="_blank"
+                  style="color: #0073ea; text-decoration: none;">https://www.youtube.com/watch?v=qGuOyVmVXDM</a>
+              </div>
+              <div class="select-wrapper">
+                <select name="attemptFindPassword" [(ngModel)]="formData.attemptFindPassword" class="form-select"
+                  required>
+                  <option value="" disabled selected></option>
+                  <option value="I found the password">I found the password</option>
+                  <option value="I was unable to get the password">I was unable to get the password</option>
+                </select>
+                <div class="select-arrow"></div>
+              </div>
+            </div>
+
+            <div class="form-group slide-down" *ngIf="formData.attemptFindPassword === 'I found the password'">
+              <label>{{ qNum['foundWifiPassword'] }}. What is your WiFi Password?</label>
+              <input type="text" name="foundWifiPassword" [(ngModel)]="formData.foundWifiPassword" required />
+            </div>
+
+            <!-- I WAS UNABLE TO GET THE PASSWORD -->
+            <ng-container *ngIf="formData.attemptFindPassword === 'I was unable to get the password'">
+              <div class="form-group slide-down">
+                <label>{{ qNum['technicalPersonKnows'] }}. Is there a technical person that would know?</label>
+                <div class="field-subtext"
+                  style="font-style: normal; margin-bottom: 0.5rem; display: block; font-size: 0.95rem;">See image</div>
+                <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+                  <label class="custom-radio">
+                    <input type="radio" name="technicalPersonKnows" value="Yes"
+                      [(ngModel)]="formData.technicalPersonKnows">
+                    <span class="radio-checkmark"></span>
+                    <span class="radio-text">Yes</span>
+                  </label>
+                  <label class="custom-radio">
+                    <input type="radio" name="technicalPersonKnows" value="No"
+                      [(ngModel)]="formData.technicalPersonKnows">
+                    <span class="radio-checkmark"></span>
+                    <span class="radio-text">No</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group slide-down" *ngIf="formData.technicalPersonKnows !== ''">
+                <label *ngIf="formData.technicalPersonKnows === 'Yes'">{{ qNum['wifiTechnicalPersonContactInfo'] }}.
+                  What is this person's contact information? (Name, Email, Phone #)</label>
+                <label *ngIf="formData.technicalPersonKnows === 'No'">{{ qNum['wifiTechnicalPersonContactInfo'] }}. We
+                  can't install at your store until a technical person can assist. What is this person's contact
+                  information? (Name, Email, Phone #)</label>
+                <input type="text" name="wifiTechnicalPersonContactInfo"
+                  [(ngModel)]="formData.wifiTechnicalPersonContactInfo" required />
+              </div>
+            </ng-container>
+          </ng-container>
         </ng-container>
 
         <!-- 🔹 COMMON FINAL SECTION 🔹 -->
-        <div class="form-group slide-down" style="padding-top: 20px; border-top: 1px solid #ddd;" *ngIf="formData.connectionType !== ''">
-          <label>Final Question: Once you connect a phone or laptop to your Wi-Fi or via Ethernet, does it get internet access right away — without any technical/IT person having to set anything up? *</label>
+        <div class="form-group slide-down" *ngIf="showInternetRightAway">
+          <label>{{ qNum['internetRightAway'] }}. Once you connect a phone or laptop to your Wi-Fi or via Ethernet, does
+            it get internet access right away — without any technical/IT person having to set anything up?</label>
           <div class="select-wrapper">
             <select name="internetRightAway" [(ngModel)]="formData.internetRightAway" class="form-select" required>
               <option value="" disabled selected>Select an option</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
+              <option value="Yes">Yes, a device can get internet access right away</option>
+              <option value="No">No, the technical/IT contact has to set the device up so that it can connect</option>
             </select>
             <div class="select-arrow"></div>
           </div>
+        </div>
+
+        <!-- Extra question if internetRightAway is No -->
+        <div class="form-group slide-down" *ngIf="formData.internetRightAway === 'No'">
+          <label>{{ qNum['itContactInfo'] }}. What is this person's contact information? (Name, Email, Phone #)</label>
+          <input id="itContactInfo" type="text" [(ngModel)]="formData.itContactInfo" name="itContactInfo"
+            placeholder="Type your answer here..." required />
         </div>
 
       </div>
