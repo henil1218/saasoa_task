@@ -1,0 +1,115 @@
+<div class="instore-container">
+  <div class="form-wrapper">
+    <div class="form-header">
+      <h1>Installation Scoping Questionnaire</h1>
+      <p class="subtitle">Device Placement</p>
+    </div>
+
+    <form class="installation-form" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h2>Device Placement</h2>
+
+        <div class="form-group slide-down">
+          <label>Is there space for the device?</label>
+          <div class="select-wrapper">
+            <select name="spaceForDevice" [(ngModel)]="formData.spaceForDevice" class="form-select" required>
+               <option value="" disabled selected>Select an option</option>
+               <option value="Yes">Yes</option>
+               <option value="No">No</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+        </div>
+
+        <div class="form-group slide-down">
+          <label>Is the space completely uncluttered?</label>
+          <div class="radio-group-vertical">
+            <label class="custom-radio">
+              <input type="radio" name="unclutteredSpace" value="Yes" [(ngModel)]="formData.unclutteredSpace" required>
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="unclutteredSpace" value="No" [(ngModel)]="formData.unclutteredSpace">
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group slide-down">
+          <label>Will the device be placed in a public area?</label>
+          <div class="select-wrapper">
+            <select name="publicArea" [(ngModel)]="formData.publicArea" class="form-select" required>
+               <option value="" disabled selected>Select an option</option>
+               <option value="Yes">Yes</option>
+               <option value="No">No</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+        </div>
+
+        <div class="form-group slide-down">
+          <label>Is there a power outlet within 5 ft?</label>
+          <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="outletWithin5ft" value="Yes" [(ngModel)]="formData.outletWithin5ft" required>
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="outletWithin5ft" value="No" [(ngModel)]="formData.outletWithin5ft">
+              <span class="radio-checkmark"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="form-group slide-down">
+          <label>Can cables be safely concealed and placed?</label>
+          <div class="select-wrapper">
+            <select name="cablesConcealed" [(ngModel)]="formData.cablesConcealed" class="form-select" required>
+               <option value="" disabled selected>Select an option</option>
+               <option value="Yes">Yes</option>
+               <option value="No">No</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+        </div>
+
+        <div class="form-group slide-down">
+          <label>Are we allowed to mount anything on walls/counters?</label>
+          <div class="select-wrapper">
+            <select name="mountingAllowed" [(ngModel)]="formData.mountingAllowed" class="form-select" required>
+               <option value="" disabled selected>Select an option</option>
+               <option value="Yes">Yes</option>
+               <option value="No">No</option>
+            </select>
+            <div class="select-arrow"></div>
+          </div>
+        </div>
+
+        <div class="form-group slide-down">
+          <label>Please upload a picture of the intended location:</label>
+          <input type="file" (change)="onFileChange($event)" accept="image/*" class="form-control" style="margin-top: 10px;" required>
+          <div *ngIf="fileName" class="file-name" style="margin-top: 5px; color: #2e578c;">
+            Selected file: {{ fileName }}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary btn-back" (click)="goBack()">
+          Back
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="saveAsDraft()">
+          Save as Draft
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

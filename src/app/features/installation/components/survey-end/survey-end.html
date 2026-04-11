@@ -1,0 +1,190 @@
+<div class="instore-container">
+  <div class="form-wrapper">
+    <!-- Header showing both logos -->
+    <div class="form-header">
+      <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+        <img src="assets/saasoa-logo.png" alt="SAASOA Logo" class="logo-saasoa" style="height: 30px;" />
+        <div class="logo-divider" style="height: 30px; width: 1px; background: #ddd;"></div>
+        <img src="assets/instore-ai-logo.png" alt="InStore.ai Logo" class="logo-instore" style="height: 30px;" />
+      </div>
+      <h1>Installation Scoping Questionnaire</h1>
+      <p class="subtitle" style="font-size: 1.25rem; font-weight: 500; color: #2c313f; margin-top: 1.5rem;">Installation Site Survey</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit(questionnaireForm)" #questionnaireForm="ngForm" class="installation-form">
+      <div class="form-section">
+        
+        <!-- Q14: Space for small device -->
+        <div class="form-group slide-down">
+          <label>14. Is there space for small device by the primary register?</label>
+          <div class="field-subtext" style="font-style: normal; color: #6a6f7d; margin-bottom: 0.8rem; display: block; font-size: 0.95rem;">Space should be flat, on the counter and near the payment system</div>
+          <div class="radio-group-horizontal" style="display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="spaceForDevice" value="Yes" [(ngModel)]="formData.spaceForDevice" required>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="spaceForDevice" value="No" [(ngModel)]="formData.spaceForDevice">
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q15: Uncluttered space -->
+        <div class="form-group slide-down">
+          <label>15. Is the small device space uncluttered/unobstructed by the display/merchandise?</label>
+          <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="unclutteredSpace" value="Yes" [(ngModel)]="formData.unclutteredSpace" required>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="unclutteredSpace" value="No" [(ngModel)]="formData.unclutteredSpace">
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q16: Public Area -->
+        <div class="form-group slide-down">
+          <label>16. Is the small device space in a public area?</label>
+          <div class="field-subtext" style="font-style: normal; color: #6a6f7d; margin-bottom: 0.8rem; display: block; margin-top: 0.2rem; font-size: 0.95rem;">The microphone must be placed in the sales floor/counter area and not back of house.</div>
+          <div class="radio-group-horizontal" style="display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="publicArea" value="Yes" [(ngModel)]="formData.publicArea" required>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="publicArea" value="No" [(ngModel)]="formData.publicArea">
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q17: Outlet within 5 ft -->
+        <div class="form-group slide-down">
+          <label>17. Is there an outlet within 5 ft of where the small device will be placed?</label>
+          <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="outletWithin5ft" value="Yes" [(ngModel)]="formData.outletWithin5ft" required>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="outletWithin5ft" value="No" [(ngModel)]="formData.outletWithin5ft">
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q18: Cables concealed -->
+        <div class="form-group slide-down">
+          <label>18. Can the cables be concealed?</label>
+          <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="cablesConcealed" value="Yes" [(ngModel)]="formData.cablesConcealed" required>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="cablesConcealed" value="No" [(ngModel)]="formData.cablesConcealed">
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q19: Mounting clips allowed -->
+        <div class="form-group slide-down">
+          <label>19. Are mounting clips/adhesives allowed?</label>
+          <div class="radio-group-horizontal" style="margin-top: 1rem; display: flex; gap: 2rem;">
+            <label class="custom-radio">
+              <input type="radio" name="mountingAllowed" value="Yes" [(ngModel)]="formData.mountingAllowed" required>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="custom-radio">
+              <input type="radio" name="mountingAllowed" value="No" [(ngModel)]="formData.mountingAllowed">
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Q20: Picture of current layout -->
+        <div class="form-group slide-down">
+          <label>20. Picture of the current layout (if possible)</label>
+          <div class="file-upload-wrapper" [style.border-bottom-left-radius]="fileName ? '0' : '8px'" [style.border-bottom-right-radius]="fileName ? '0' : '8px'">
+            <input type="file" (change)="onFileChange($event)" accept="image/*" />
+            <div class="upload-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <div class="upload-instruction">
+                <span>Choose a file to upload</span> or drag and drop here
+              </div>
+            </div>
+          </div>
+          
+          <!-- File Preview Box -->
+          <div class="file-preview-card" *ngIf="fileName">
+            <img *ngIf="filePreviewUrl" [src]="filePreviewUrl" alt="Preview" class="file-thumbnail clickable" (click)="openImageModal()" title="Click to view full image" />
+            <div class="file-info">
+              <div class="file-name clickable list-name" (click)="openImageModal()" title="Click to view full image">{{ fileName }}</div>
+              <div class="file-size">{{ fileSize }}</div>
+            </div>
+            <button type="button" class="file-remove-btn" (click)="removeFile()" aria-label="Remove file">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- Submission Status Messages -->
+      <div *ngIf="submitError" class="alert-info" style="background-color: #fdf3f4; border-color: #fab2b9; color: #b71d1e; margin-bottom: 2rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p style="margin: 0;">{{ submitError }}</p>
+      </div>
+
+      <div *ngIf="submitSuccess" class="alert-info" style="background-color: #f1fdf5; border-color: #bbf3ce; color: #15803d; margin-bottom: 2rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <p style="margin: 0; font-weight: 500;">Success! Your data has been securely saved and authenticated to the Beeceptor API.</p>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary btn-back" (click)="goBack()">
+          Back
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="saveAsDraft()">
+          Save as draft
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || submitSuccess">
+          <span *ngIf="!isSubmitting && !submitSuccess">Submit</span>
+          <span *ngIf="isSubmitting">Submitting...</span>
+          <span *ngIf="submitSuccess">Submitted!</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Full Screen Image Modal -->
+<div class="image-modal-overlay" *ngIf="showImageModal" (click)="closeImageModal()">
+  <div class="image-modal-content" (click)="$event.stopPropagation()">
+    <button class="image-modal-close" (click)="closeImageModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <img [src]="filePreviewUrl" alt="Full screen preview" />
+  </div>
+</div>

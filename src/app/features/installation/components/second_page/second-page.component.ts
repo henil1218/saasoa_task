@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 interface Page2FormData {
   itPerson: string;
   routerLocation: string;
+  customRouterLocation: string;
   connectionType: 'cable' | 'wifi' | 'both' | '';
   cableHole: string;
   runCable: string;
@@ -36,6 +37,7 @@ export class SecondPageComponent {
   formData: Page2FormData = {
     itPerson: '',
     routerLocation: '',
+    customRouterLocation: '',
     connectionType: '',
     cableHole: '',
     runCable: '',
@@ -65,6 +67,11 @@ export class SecondPageComponent {
     return false;
   }
 
+  get needsTechnicalPerson(): boolean {
+    return this.formData.attemptFindPassword === 'I was unable to get the password' || 
+           this.formData.findConnectedDevice === 'No';
+  }
+
   get showWifiQuestions(): boolean {
      return this.formData.connectionType === 'wifi' || (this.isWifiFallback && this.formData.wifiTransition === 'Continue');
   }
@@ -73,12 +80,56 @@ export class SecondPageComponent {
     if (this.formData.connectionType === '') return false;
     
     // Terminal branches where the form should end early
-    if (this.formData.cableHole === 'Yes' && this.formData.runCable === 'No' && this.formData.counterHole === 'No') {
-      return false;
+    if (this.formData.connectionType === 'cable' || this.formData.connectionType === 'both') {
+       if (this.formData.cableHole === 'Yes' && this.formData.runCable === 'No' && this.formData.counterHole === 'No') {
+         return false;
+       }
     }
 
-    if (this.formData.technicalPersonKnows === 'No') {
-      return false;
+    // GATING LOGIC: Wait until current branch is complete
+
+    if (this.isWifiFallback) {
+      if (this.formData.wifiTransition !== 'Continue') return false;
+    }
+
+    let inWifiQuestions = this.formData.connectionType === 'wifi' || this.isWifiFallback;
+
+    if (inWifiQuestions) {
+      if (this.formData.seeWifi === '') return false;
+      if (this.formData.wifiName === '') return false;
+      
+      let isWaitingForPassword = this.formData.wifiName !== "I don't know" && this.formData.wifiPassword === '';
+      if (isWaitingForPassword) return false;
+
+      let needsHelp = this.formData.wifiName === "I don't know" || this.formData.wifiPassword === "I don't know";
+      if (needsHelp) {
+        if (this.formData.findConnectedDevice === '') return false;
+        
+        if (this.formData.findConnectedDevice === 'Yes') {
+          if (this.formData.attemptFindPassword === '') return false;
+          
+          if (this.formData.attemptFindPassword === 'I found the password') {
+            return true;
+          } else if (this.formData.attemptFindPassword === 'I was unable to get the password') {
+             if (this.formData.technicalPersonKnows === '') return false;
+             if (this.formData.technicalPersonKnows === 'No') return false; 
+             if (this.formData.technicalPersonKnows === 'Yes') return true;
+          }
+        } else if (this.formData.findConnectedDevice === 'No') {
+           if (this.formData.technicalPersonKnows === '') return false;
+           if (this.formData.technicalPersonKnows === 'No') return false; 
+           if (this.formData.technicalPersonKnows === 'Yes') return true;
+        }
+      }
+    } else {
+      // Pure Ethernet branch
+      if (this.formData.cableHole === '') return false;
+      if (this.formData.cableHole === 'Yes') {
+         if (this.formData.runCable === '') return false;
+         if (this.formData.runCable === 'No') {
+            if (this.formData.counterHole === '') return false;
+         }
+      }
     }
 
     return true;
@@ -117,11 +168,13 @@ export class SecondPageComponent {
             n++; map['attemptFindPassword'] = n;
             if (this.formData.attemptFindPassword === 'I found the password') {
                n++; map['foundWifiPassword'] = n;
-            } else if (this.formData.attemptFindPassword === 'I was unable to get the password') {
-               n++; map['technicalPersonKnows'] = n;
-               if (this.formData.technicalPersonKnows !== '') {
-                  n++; map['wifiTechnicalPersonContactInfo'] = n;
-               }
+            }
+         }
+         
+         if (this.needsTechnicalPerson) {
+            n++; map['technicalPersonKnows'] = n;
+            if (this.formData.technicalPersonKnows !== '') {
+               n++; map['wifiTechnicalPersonContactInfo'] = n;
             }
          }
       }
@@ -147,14 +200,12 @@ export class SecondPageComponent {
       return;
     }
 
-    if (!this.formData.internetRightAway) {
+    if (!this.formData.internetRightAway && this.showInternetRightAway) {
       alert('Please complete all conditional questions and the final section check.');
       return;
     }
 
-    alert('Page 2 Form submitted successfully! Next up: Page 3 Integration.');
-    // Here we will navigate to page 3 once it's created:
-    // this.router.navigate(['/third-page']);
+    this.router.navigate(['/third-page']);
   }
 
   saveAsDraft() {

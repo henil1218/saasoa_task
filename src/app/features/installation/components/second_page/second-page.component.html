@@ -31,10 +31,14 @@
               <option value="" disabled selected>Select an option</option>
               <option value="Register/counter area">Register/counter area</option>
               <option value="Back Office">Back Office</option>
-              <option value="Other">Other: (member can write in answer here)</option>
+              <option value="Other">Other</option>
             </select>
             <div class="select-arrow"></div>
           </div>
+          <input *ngIf="formData.routerLocation === 'Other'" type="text" name="customRouterLocation"
+            [(ngModel)]="formData.customRouterLocation"
+            style="margin-top: 1rem; width: 100%; box-sizing: border-box; padding: 1rem 1.2rem; border: 1px solid #dcdcdc; border-radius: 8px; font-size: 1rem;"
+            placeholder="Type your answer here..." required />
         </div>
 
         <!-- Q13: Internet Connection Type -->
@@ -233,8 +237,8 @@
               <input type="text" name="foundWifiPassword" [(ngModel)]="formData.foundWifiPassword" required />
             </div>
 
-            <!-- I WAS UNABLE TO GET THE PASSWORD -->
-            <ng-container *ngIf="formData.attemptFindPassword === 'I was unable to get the password'">
+            <!-- I WAS UNABLE TO GET THE PASSWORD OR COULD NO FIND DEVICE -->
+            <ng-container *ngIf="needsTechnicalPerson">
               <div class="form-group slide-down">
                 <label>{{ qNum['technicalPersonKnows'] }}. Is there a technical person that would know?</label>
                 <div class="field-subtext"
@@ -283,7 +287,7 @@
         </div>
 
         <!-- Extra question if internetRightAway is No -->
-        <div class="form-group slide-down" *ngIf="formData.internetRightAway === 'No'">
+        <div class="form-group slide-down" *ngIf="showInternetRightAway && formData.internetRightAway === 'No'">
           <label>{{ qNum['itContactInfo'] }}. What is this person's contact information? (Name, Email, Phone #)</label>
           <input id="itContactInfo" type="text" [(ngModel)]="formData.itContactInfo" name="itContactInfo"
             placeholder="Type your answer here..." required />
