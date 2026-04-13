@@ -84,6 +84,9 @@ export class InstoreAiComponent {
        return;
     }
 
+    // Save page 1 data to localStorage before navigating
+    localStorage.setItem('instoreAiDraft', JSON.stringify(data));
+    
     // Navigate to second page
     this.router.navigate(['/second-page']);
   }

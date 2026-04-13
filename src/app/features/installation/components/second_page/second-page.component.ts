@@ -205,6 +205,9 @@ export class SecondPageComponent {
       return;
     }
 
+    // Save page 2 data before navigating
+    localStorage.setItem('installationPage2Draft', JSON.stringify(this.formData));
+
     this.router.navigate(['/third-page']);
   }
 

@@ -19,7 +19,7 @@
             placeholder="Enter store name"
             required
           />
-          <div class="char-count">0/255</div>
+          
         </div>
 
         <div class="form-group">
@@ -34,40 +34,40 @@
           />
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="city">3. City *</label>
-            <input
-              id="city"
-              type="text"
-              [(ngModel)]="formData.city"
-              name="city"
-              placeholder="City"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="state">4. State *</label>
-            <input
-              id="state"
-              type="text"
-              [(ngModel)]="formData.state"
-              name="state"
-              placeholder="State"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="zip">5. Zip *</label>
-            <input
-              id="zip"
-              type="text"
-              [(ngModel)]="formData.zip"
-              name="zip"
-              placeholder="Zip code"
-              required
-            />
-          </div>
+        <div class="form-group">
+          <label for="city">3. City *</label>
+          <input
+            id="city"
+            type="text"
+            [(ngModel)]="formData.city"
+            name="city"
+            placeholder="City"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="state">4. State *</label>
+          <input
+            id="state"
+            type="text"
+            [(ngModel)]="formData.state"
+            name="state"
+            placeholder="State"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="zip">5. Zip *</label>
+          <input
+            id="zip"
+            type="text"
+            [(ngModel)]="formData.zip"
+            name="zip"
+            placeholder="Zip code"
+            required
+          />
         </div>
       </div>
 
@@ -93,7 +93,7 @@
             type="tel"
             [(ngModel)]="formData.contactPhone"
             name="contactPhone"
-            placeholder="(123) 456-7890"
+            placeholder="Store Contact Phone"
             required
           />
         </div>
@@ -121,7 +121,7 @@
             type="text"
             [(ngModel)]="formData.chainName"
             name="chainName"
-            placeholder="Chain name (optional)"
+            placeholder="Chain name"
           />
         </div>
 

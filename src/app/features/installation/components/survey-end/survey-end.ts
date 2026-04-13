@@ -106,42 +106,41 @@ export class SurveyEnd implements OnInit {
     this.submitError = '';
 
     try {
-      // Create payload from local storage plus this page's formData
-      const prevData1 = JSON.parse(localStorage.getItem('firstPageData') || '{}');
-      const prevData2 = JSON.parse(localStorage.getItem('secondPageData') || '{}');
-      
+      // Read Page 1 & Page 2 data from correct localStorage keys
+      const prevData1 = JSON.parse(localStorage.getItem('instoreAiDraft') || '{}');
+      const prevData2 = JSON.parse(localStorage.getItem('installationPage2Draft') || '{}');
+
       const payload = {
-        page1: prevData1,
-        page2: prevData2,
-        page3: {
+        page1_StoreInfo: prevData1,
+        page2_NetworkInfo: prevData2,
+        page3_DevicePlacement: {
           ...this.formData,
           picture: this.fileName // sending file name instead of binary for dummy API
         }
       };
 
-      // We use native fetch with 'no-cors' mode
-      // This tells the browser NOT to run CORS preflight checks, ensuring Beeceptor
-      // gets the POST request without blocking it!
-      
-      console.log('✅ Final Prepared Details Submitted to Server:', payload);
-      
-      fetch('https://henil-saasoa.free.beeceptor.com', {
+      // Console ma badha 3 pages nu data show karo
+      console.log('📋 Page 1 - Store Info:', prevData1);
+      console.log('🌐 Page 2 - Network Info:', prevData2);
+      console.log('📍 Page 3 - Device Placement:', { ...this.formData, picture: this.fileName });
+      console.log('✅ Full Payload Submitted to PostBin:', payload);
+
+      fetch('https://eosnhhyc0qpq22s.m.pipedream.net', {
         method: 'POST',
-        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
       .then(() => {
-        // Since it's no-cors, it succeeds automatically if network is alive
-        console.log('Dummy API SUCCESS: Reached Beeceptor!');
+        console.log('🚀 PostBin API SUCCESS: All 3 pages data sent!');
         this.isSubmitting = false;
         this.submitSuccess = true;
         this.cdr.detectChanges();
-        
-        // Clear drafts after success
-        localStorage.removeItem('firstPageData');
-        localStorage.removeItem('secondPageData');
-        localStorage.removeItem('thirdPageDraft');
-        
+
+        // Clear all drafts after success
+        localStorage.removeItem('instoreAiDraft');
+        localStorage.removeItem('installationPage2Draft');
+        localStorage.removeItem('installationPage3Draft');
+
         // Show success for a bit then redirect
         setTimeout(() => {
           console.log('Redirecting to home...');
