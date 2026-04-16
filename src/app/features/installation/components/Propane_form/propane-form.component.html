@@ -1,0 +1,236 @@
+<div class="propane-page">
+
+  <!-- Page Header Banner -->
+  <div class="page-banner">
+    <h1 class="banner-title">PROPANE DOCUMENT</h1>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card-wrapper">
+    <div class="form-card">
+
+      <!-- Card Title Row -->
+      <div class="card-title-row">
+        <h2 class="card-title">Propane Document Information</h2>
+      </div>
+
+      <form class="propane-form" (ngSubmit)="onSubmit()">
+
+        <!-- Row 1: SAASOA ID + Primary User -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="saasoapId">SAASOA ID# *</label>
+            <input id="saasoapId" type="text" [(ngModel)]="formData.saasoapId"
+                   name="saasoapId" placeholder="Enter SAASOA ID" required />
+          </div>
+          <div class="form-group">
+            <label for="primaryUser">Select Primary User *</label>
+            <div class="select-wrapper">
+              <select id="primaryUser" [(ngModel)]="formData.primaryUser"
+                      name="primaryUser" required>
+                <option value="">Select Primary User</option>
+                <option *ngFor="let u of primaryUserOptions" [value]="u">{{ u }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Company Legal Name + Store Name -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="companyLegalName">Company Legal Name *</label>
+            <input id="companyLegalName" type="text" [(ngModel)]="formData.companyLegalName"
+                   name="companyLegalName" placeholder="Enter company legal name" required />
+          </div>
+          <div class="form-group">
+            <label for="storeName">Store Name *</label>
+            <input id="storeName" type="text" [(ngModel)]="formData.storeName"
+                   name="storeName" placeholder="Enter store name" required />
+          </div>
+        </div>
+
+        <!-- Row 3: Sales Tax + EIN Number -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="salesTax">Sales Tax *</label>
+            <input id="salesTax" type="text" [(ngModel)]="formData.salesTax"
+                   name="salesTax" placeholder="Enter sales tax number" required />
+          </div>
+          <div class="form-group">
+            <label for="einNumber">EIN Number *</label>
+            <input id="einNumber" type="text" [(ngModel)]="formData.einNumber"
+                   name="einNumber" placeholder="Enter EIN number" required />
+          </div>
+        </div>
+
+        <!-- Row 4: Email (full width) -->
+        <div class="form-row-1">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" [(ngModel)]="formData.email"
+                   name="email" placeholder="email@example.com" />
+          </div>
+        </div>
+
+        <!-- Checkboxes Row -->
+        <div class="checkboxes-row">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="formData.billingInfoSame"
+                   name="billingInfoSame" (change)="onBillingInfoSameChange()" />
+            <span class="checkmark"></span>
+            Billing information is the same As above
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="formData.payableContactInfoSame"
+                   name="payableContactInfoSame" (change)="onPayableContactInfoSameChange()" />
+            <span class="checkmark"></span>
+            Payable Contact information is the same As above
+          </label>
+        </div>
+
+        <!-- Billing + Payable Contact Side by Side -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="billingEmailAddress">Billing Email Address *</label>
+            <input id="billingEmailAddress" type="email" [(ngModel)]="formData.billingEmailAddress"
+                   name="billingEmailAddress" placeholder="billing@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="payableContactName">Payable Contact Name *</label>
+            <input id="payableContactName" type="text" [(ngModel)]="formData.payableContactName"
+                   name="payableContactName" placeholder="Full name" required />
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="billingAddress">Billing Address *</label>
+            <input id="billingAddress" type="text" [(ngModel)]="formData.billingAddress"
+                   name="billingAddress" placeholder="Enter billing address" required />
+          </div>
+          <div class="form-group">
+            <label for="payableContactPhone">Payable Contact Phone *</label>
+            <input id="payableContactPhone" type="tel" [(ngModel)]="formData.payableContactPhone"
+                   name="payableContactPhone" placeholder="Enter phone number" required />
+          </div>
+        </div>
+
+        <!-- Billing City/State/Zip + Payable Contact Email -->
+        <div class="form-row-2">
+          
+          <div class="billing-location-row">
+            <div class="form-group">
+              <label for="billingCity">Billing City *</label>
+              <input id="billingCity" type="text" [(ngModel)]="formData.billingCity"
+                     name="billingCity" placeholder="City" required />
+            </div>
+            <div class="form-group">
+              <label for="billingState">Billing State *</label>
+              <input id="billingState" type="text" [(ngModel)]="formData.billingState"
+                     name="billingState" placeholder="State" required />
+            </div>
+            <div class="form-group">
+              <label for="billingZipcode">Billing Zipcode *</label>
+              <input id="billingZipcode" type="text" [(ngModel)]="formData.billingZipcode"
+                     name="billingZipcode" placeholder="Zipcode" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="payableContactEmail">Payable Contact Email *</label>
+            <input id="payableContactEmail" type="email" [(ngModel)]="formData.payableContactEmail"
+                   name="payableContactEmail" placeholder="payable@example.com" required />
+          </div>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="terms-section">
+          <h3 class="terms-heading">Terms & Conditions</h3>
+          <div class="terms-box" [class.expanded]="showFullTerms">
+            <p class="terms-text">{{ termsText }}</p>
+          </div>
+          <button type="button" class="read-more-btn" (click)="toggleTerms()">
+            {{ showFullTerms ? 'Read Less' : 'Read More' }}
+          </button>
+        </div>
+
+        <!-- Agree Checkbox -->
+        <div class="agree-row">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="formData.agreeTerms"
+                   name="agreeTerms" />
+            <span class="checkmark"></span>
+            I agree to the Terms &amp; Conditions
+          </label>
+        </div>
+
+        <!-- Sign + Date Row -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="signHere">Sign Here *</label>
+            <input id="signHere" type="text" [(ngModel)]="formData.signHere"
+                   name="signHere" placeholder="Type your full name as signature" required />
+          </div>
+          <div class="form-group">
+            <label for="date">Date *</label>
+            <input id="date" type="date" [(ngModel)]="formData.date"
+                   name="date" required />
+          </div>
+        </div>
+
+        <!-- Payment Method + Propane Service Type -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="paymentMethod">Payment Method *</label>
+            <div class="select-wrapper">
+              <select id="paymentMethod" [(ngModel)]="formData.paymentMethod"
+                      name="paymentMethod" required>
+                <option value="">Select Payment Method</option>
+                <option *ngFor="let m of paymentMethodOptions" [value]="m">{{ m }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="propaneServiceType">Propane Service Type *</label>
+            <div class="select-wrapper">
+              <select id="propaneServiceType" [(ngModel)]="formData.propaneServiceType"
+                      name="propaneServiceType" required>
+                <option value="">Select Service Request</option>
+                <option *ngFor="let s of propaneServiceTypeOptions" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exchange Price + Purchase Price -->
+        <div class="form-row-prices">
+          <div class="form-group">
+            <label for="exchangePrice">Exchange Price *</label>
+            <div class="price-input-wrapper">
+              <span class="currency-symbol">$</span>
+              <input id="exchangePrice" type="number" [(ngModel)]="formData.exchangePrice"
+                     name="exchangePrice" placeholder="0.00" step="0.01" min="0" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="purchasePrice">Purchase Price *</label>
+            <div class="price-input-wrapper">
+              <span class="currency-symbol">$</span>
+              <input id="purchasePrice" type="number" [(ngModel)]="formData.purchasePrice"
+                     name="purchasePrice" placeholder="0.00" step="0.01" min="0" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" id="addToStoreDocuments">
+            ADD TO STORE DOCUMENTS
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
