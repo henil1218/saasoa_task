@@ -1,0 +1,49 @@
+Y_pdf2json: 0.83 | PDF_LIB (X:205.5, Y:778.3) ->  
+Y_pdf2json: 5.80 | PDF_LIB (X:425.1, Y:696.3) ->  
+Y_pdf2json: 6.62 | PDF_LIB (X:241.0, Y:682.8) -> Division of Parker  G as  C o., Inc. 
+Y_pdf2json: 7.34 | PDF_LIB (X:279.7, Y:670.9) -> P.O. Box 2588 
+Y_pdf2json: 8.03 | PDF_LIB (X:258.6, Y:659.5) ->  C linton, N C  28329-2588 
+Y_pdf2json: 8.72 | PDF_LIB (X:233.4, Y:648.2) -> P: (910) 592-0199 F: (910) 592-6450 
+Y_pdf2json: 9.43 | PDF_LIB (X:258.8, Y:636.3) -> www.rapidxchange.com 
+Y_pdf2json: 10.15 | PDF_LIB (X:180.5, Y:624.5) -> Agreement for Propane  C ylinder Exchange and Equipment  
+Y_pdf2json: 10.87 | PDF_LIB (X:-4.1, Y:612.6) ->  
+Y_pdf2json: 11.98 | PDF_LIB (X:20.6, Y:594.3) -> SAASOA ID#: SAASOA ID
+Y_pdf2json: 13.46 | PDF_LIB (X:20.6, Y:570.0) ->  C ompany Legal Name: Legal Name
+Y_pdf2json: 14.96 | PDF_LIB (X:20.6, Y:545.2) -> DBA :  DBA
+Y_pdf2json: 16.46 | PDF_LIB (X:20.6, Y:520.5) -> EIN Number :  EIN                                                                                         State Sales Tax Number :  Sales Tax
+Y_pdf2json: 17.77 | PDF_LIB (X:20.6, Y:498.8) -> Store Address: Store Addree  [GAP]  Primary  C ontact: Primary Contact
+Y_pdf2json: 18.89 | PDF_LIB (X:20.6, Y:480.2) ->    [GAP]  Phone: Phone
+Y_pdf2json: 19.84 | PDF_LIB (X:157.5, Y:464.6) ->    [GAP]   
+Y_pdf2json: 20.61 | PDF_LIB (X:15.2, Y:452.0) ->    C ity: City  [GAP]  State: State   [GAP]  Zip: Zip    [GAP]  Email: Email
+Y_pdf2json: 21.32 | PDF_LIB (X:317.6, Y:440.2) ->  
+Y_pdf2json: 22.32 | PDF_LIB (X:20.6, Y:423.8) -> Email Invoices and Statements? Yes    [GAP]  No     [GAP]  Accounts Payable  C ontact:  Payable Contact
+Y_pdf2json: 23.44 | PDF_LIB (X:20.6, Y:405.2) -> Email Address for Above Email  [GAP]   
+Y_pdf2json: 24.57 | PDF_LIB (X:20.6, Y:386.7) -> Billing Address: Billing Address  [GAP]  Phone:  Phone
+Y_pdf2json: 25.69 | PDF_LIB (X:20.6, Y:368.1) ->    [GAP]  Email: Email
+Y_pdf2json: 26.82 | PDF_LIB (X:20.6, Y:349.5) ->  C ity: City  [GAP]  State: State          Zip: Zip    [GAP]   
+Y_pdf2json: 27.81 | PDF_LIB (X:195.9, Y:333.1) -> Type your text
+Y_pdf2json: 28.47 | PDF_LIB (X:111.5, Y:322.2) -> IF MULTIPLE LO C ATIONS PLEASE ATTA C H STORE LIST TO THIS A G REEMENT! 
+Y_pdf2json: 29.20 | PDF_LIB (X:-4.1, Y:310.3) ->  
+Y_pdf2json: 29.91 | PDF_LIB (X:83.0, Y:298.4) -> THIS A G REEMENT is made and entered into by and between Parker  G as  C o., Inc. dba RapidXchange 
+Y_pdf2json: 30.63 | PDF_LIB (X:215.4, Y:286.6) -> hereinafter referred to as “ C ompany” Price 
+Y_pdf2json: 31.41 | PDF_LIB (X:-4.1, Y:273.7) ->  
+Y_pdf2json: 32.31 | PDF_LIB (X:190.8, Y:259.0) -> Program   [GAP]  *Exchange   [GAP]  *Purchase 
+Y_pdf2json: 33.27 | PDF_LIB (X:190.8, Y:243.0) -> Grill Gas   [GAP]   Exchange  [GAP]   Purchase
+Y_pdf2json: 35.10 | PDF_LIB (X:230.8, Y:212.8) -> Payment Method (Check One) 
+Y_pdf2json: 36.01 | PDF_LIB (X:154.4, Y:197.8) -> POD ( C heck or Money Orders Only. No  C ash)   [GAP]   POD
+Y_pdf2json: 36.96 | PDF_LIB (X:154.4, Y:182.2) -> Bank Draft ( C omplete Additional Form)   [GAP]   Bank
+Y_pdf2json: 37.93 | PDF_LIB (X:154.4, Y:166.2) -> Credit Card on File ( C omplete Additional Form)   [GAP]   Card
+Y_pdf2json: 38.88 | PDF_LIB (X:154.4, Y:150.4) -> Credit (Application Required)   [GAP]  Credit 
+Y_pdf2json: 40.34 | PDF_LIB (X:14.4, Y:126.4) -> 1. Term: The term of this Agreement shall be valid between October 1st, 2024 - September 30th, 2026.  On expiration of the initial term of this Agreement or subsequent 
+Y_pdf2json: 40.91 | PDF_LIB (X:33.0, Y:116.9) -> renewal terms, this Agreement shall automatically renew on a month-to-month basis until a new SAASOA agreement is signed.  SAASOA will notify you 30 days prior to 
+Y_pdf2json: 41.49 | PDF_LIB (X:33.0, Y:107.4) -> expiration of the current contract via Member Portal to provide you with an opportunity to renew.    
+Y_pdf2json: 42.06 | PDF_LIB (X:14.4, Y:98.0) -> 2. Pricing: Pricing will be fixed for the duration of the agreement.   
+Y_pdf2json: 42.64 | PDF_LIB (X:14.4, Y:88.5) -> 3. Equipment/Minimum Usage:  C ompany will lease and install cabinet displays, merchandising, cylinders, and locks as determined necessary to provide adequate inventory 
+Y_pdf2json: 43.21 | PDF_LIB (X:33.0, Y:79.0) -> to  C . If a determined minimum amount is not delivered to location annually, the company reserves the right to all the following:  
+Y_pdf2json: 43.79 | PDF_LIB (X:51.6, Y:69.4) -> (1) place “customer” on a “will call” status, (2) remove equipment from location, (3) charge an annual equipment lease. Usage requirements and lease fees are 
+Y_pdf2json: 44.37 | PDF_LIB (X:51.6, Y:60.0) -> available upon request.  C ustomer acknowledges that  C ompany is the owner of all equipment provided (cabinets and cylinders) and is entitled to recover the equipment 
+Y_pdf2json: 44.94 | PDF_LIB (X:51.6, Y:50.5) -> upon any breach of this agreement. “ C ustomer” acknowledges they have purchased only the propane within the cylinders and are only entitled a refund for that based 
+Y_pdf2json: 45.52 | PDF_LIB (X:51.6, Y:41.0) -> on the negotiated pricing with SAASOA less any outstanding balances. “ C ustomer” shall be liable for damages to equipment, normal wear and tear excepted. A 
+Y_pdf2json: 46.09 | PDF_LIB (X:51.6, Y:31.5) -> restocking fee will be applied to any refund due to the customer upon removal of equipment. “ C ustomer” shall only use leased equipment in connection with the 
+Y_pdf2json: 46.67 | PDF_LIB (X:51.6, Y:22.0) ->  C ompany’s cylinder exchange program and for no other purpose. The  C ompany is not responsible for, nor shall have any duty to, repair or otherwise restore 
+Y_pdf2json: 47.24 | PDF_LIB (X:51.6, Y:12.5) ->  C ustomer’s premises to their previous condition following the installation, servicing, or removal of any equipment provided in connection with this Agreement. (ie. 

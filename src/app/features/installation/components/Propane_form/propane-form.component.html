@@ -1,5 +1,19 @@
 <div class="propane-page">
 
+  <!-- Warning Modal Overlay -->
+  <div class="warning-modal-overlay" *ngIf="showWarningModal">
+    <div class="warning-modal">
+      <h2 class="warning-title">Warning !</h2>
+      <p class="warning-text">
+        Member if you have currently RapidXchange Propane service for your store, you are not required to submit this Application, Please send Invoice copy to SAASOA Team 251-2595971
+      </p>
+      <div class="warning-actions">
+        <button class="btn-process" (click)="onProcess()">Process</button>
+        <button class="btn-cancel" (click)="goBack()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Page Header Banner -->
   <div class="page-banner">
     <h1 class="banner-title">PROPANE DOCUMENT</h1>
@@ -27,7 +41,7 @@
             <label for="primaryUser">Select Primary User *</label>
             <div class="select-wrapper">
               <select id="primaryUser" [(ngModel)]="formData.primaryUser"
-                      name="primaryUser" required>
+                      name="primaryUser" (ngModelChange)="onPrimaryUserChange()" required>
                 <option value="">Select Primary User</option>
                 <option *ngFor="let u of primaryUserOptions" [value]="u">{{ u }}</option>
               </select>
@@ -68,7 +82,7 @@
           <div class="form-group">
             <label for="email">Email</label>
             <input id="email" type="email" [(ngModel)]="formData.email"
-                   name="email" placeholder="email@example.com" />
+                   name="email" (ngModelChange)="onEmailChange()" placeholder="email@example.com" />
           </div>
         </div>
 
@@ -174,7 +188,7 @@
           <div class="form-group">
             <label for="date">Date *</label>
             <input id="date" type="date" [(ngModel)]="formData.date"
-                   name="date" required />
+                   name="date" [max]="maxDate" required />
           </div>
         </div>
 
