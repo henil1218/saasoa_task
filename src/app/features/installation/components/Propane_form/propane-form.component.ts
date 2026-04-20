@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom, timeout } from 'rxjs';
+import { NgForm } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 interface PropaneFormData {
@@ -23,6 +26,7 @@ interface PropaneFormData {
   billingState: string;
   billingZipcode: string;
   payableContactEmail: string;
+  payableUser: string;
   agreeTerms: boolean;
   signHere: string;
   date: string;
@@ -40,10 +44,19 @@ interface PropaneFormData {
   styleUrl: './propane-form.component.css'
 })
 export class PropaneFormComponent {
-  constructor(private router: Router) { }
-
   showFullTerms = false;
   showWarningModal = true;
+  showPdfModal = false;
+  isGeneratingPdf = false;
+  formSubmittedSuccessfully = false;
+  pdfUrl: SafeResourceUrl | null = null;
+  rawBlobUrl: string | null = null;
+
+  constructor(
+    private router: Router, 
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
+  ) { }
 
   onProcess() {
     this.showWarningModal = false;
@@ -68,6 +81,7 @@ export class PropaneFormComponent {
     billingState: '',
     billingZipcode: '',
     payableContactEmail: '',
+    payableUser: '',
     agreeTerms: false,
     signHere: '',
     date: '',
@@ -104,8 +118,14 @@ export class PropaneFormComponent {
     if (this.formData.primaryUser && this.userDatabase[this.formData.primaryUser]) {
       const user = this.userDatabase[this.formData.primaryUser];
       this.formData.email = user.email;
+      
+      // Auto-select checkboxes when primary user is selected
+      this.formData.billingInfoSame = true;
+      this.formData.payableContactInfoSame = true;
     } else {
       this.formData.email = '';
+      this.formData.billingInfoSame = false;
+      this.formData.payableContactInfoSame = false;
     }
 
     if (this.formData.billingInfoSame) {
@@ -152,17 +172,24 @@ export class PropaneFormComponent {
       if (user) {
         this.formData.payableContactPhone = user.phone;
       }
+      this.formData.payableUser = this.formData.primaryUser;
     } else {
       this.formData.payableContactName = '';
       this.formData.payableContactEmail = '';
       this.formData.payableContactPhone = '';
+      this.formData.payableUser = '';
     }
+  }
+
+  onPayableUserChange() {
+    // Keep selection but do not auto-fill fields as per user request
   }
 
   toggleTerms() {
     this.showFullTerms = !this.showFullTerms;
   }
-  async onSubmit() {
+
+  async onSubmit(form: NgForm) {
     if (!this.formData.agreeTerms) {
       alert('Please agree to the Terms & Conditions before submitting.');
       return;
@@ -214,107 +241,74 @@ export class PropaneFormComponent {
     }
 
     console.log('Propane Form Submitted:', this.formData);
-    alert('Propane Document submitted successfully! Added to Store Documents.');
+    this.isGeneratingPdf = true;
 
-    // Call the function to generate and download PDF
-    await this.generatePDF();
+    // Capture data
+    const dataToSubmit = { ...this.formData };
 
-    this.resetForm();
-  }
-
-  async generatePDF() {
     try {
-      // 1. Fetch PDF from the public folder
-      const pdfUrl = 'SaasoaPropane2025_V2.pdf';
-      const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
-
-      // 2. Load the PDF document
-      const pdfDoc = await PDFDocument.load(existingPdfBytes);
-
-      // 3. Get the first page of the PDF (use pages[1] for the second page)
-      const pages = pdfDoc.getPages();
-      const firstPage = pages[0];
-
-      // 4. Create a list of data and its Coordinates (X, Y)
-      const textElements = [
-        { name: 'SAASOA ID', text: this.formData.saasoapId, x: 99, y: 580 },
-        { name: 'Company Legal Name', text: this.formData.companyLegalName, x: 145, y: 567.2 },
-        { name: 'Store Name (DBA)', text: this.formData.storeName, x: 74, y: 543.89 },
-        { name: 'EIN Number', text: this.formData.einNumber, x: 104, y: 518.39 },
-        { name: 'Sales Tax', text: this.formData.salesTax, x: 433, y: 519.12 },
-
-        { name: 'Store Address', text: this.formData.billingAddress, x: 128, y: 497.99 },
-        { name: 'Primary Contact', text: this.formData.primaryUser, x: 410, y: 498.72 },
-        { name: 'Primary Contact Phone', text: this.formData.payableContactPhone, x: 363.92, y: 480.5 },
-        { name: 'Store City', text: this.formData.billingCity, x: 63, y: 452.82 },
-        { name: 'Store State', text: this.formData.billingState, x: 186, y: 453.55 },
-        { name: 'Store Zip', text: this.formData.billingZipcode, x: 259, y: 452.82 },
-        { name: 'Store Email', text: this.formData.email, x: 393, y: 453.55 },
-
-        { name: 'Accounts Payable Contact', text: this.formData.payableContactName, x: 451, y: 425.86 },
-        { name: 'Billing Email', text: this.formData.billingEmailAddress, x: 182, y: 406.92 },
-        { name: 'Billing Address', text: this.formData.billingAddress, x: 140, y: 389.44 },
-        { name: 'Billing Phone', text: this.formData.payableContactPhone, x: 363, y: 388.71 },
-        { name: 'Payable Email', text: this.formData.payableContactEmail, x: 393, y: 371.95 },
-        { name: 'Billing City', text: this.formData.billingCity, x: 63, y: 353.74 },
-        { name: 'Billing State', text: this.formData.billingState, x: 188, y: 353.74 },
-        { name: 'Billing Zip', text: this.formData.billingZipcode, x: 256, y: 353.74 },
-
-        { name: 'Service Type Text', text: this.formData.propaneServiceType, x: 344, y: 353.74 },
-        { name: 'Exchange Price', text: this.formData.exchangePrice, x: 308, y: 251.74 },
-        { name: 'Purchase Price', text: this.formData.purchasePrice, x: 393, y: 251.74 },
-        { name: 'Payment Method Text', text: this.formData.paymentMethod, x: 560, y: 159.95 }
-      ];
-
-      // Payment method checkboxes logic
-      if (this.formData.paymentMethod) {
-        if (this.formData.paymentMethod.includes('POD')) {
-          textElements.push({ name: 'Payment: POD Mark', text: 'X', x: 513.2, y: 213.13 });
-        }
-        if (this.formData.paymentMethod.includes('Bank Draft')) {
-          textElements.push({ name: 'Payment: Bank Draft Mark', text: 'X', x: 487.0, y: 194.19 });
-        }
-        if (this.formData.paymentMethod.includes('Credit Card')) {
-          textElements.push({ name: 'Payment: Card on File Mark', text: 'X', x: 95.2, y: 175.25 });
-        }
-        if (this.formData.paymentMethod.includes('Credit (')) {
-          textElements.push({ name: 'Payment: Credit Mark', text: 'X', x: 84.2, y: 160.68 });
-        }
-      }
-
-      // Print elements on the first page
-      textElements.forEach(el => {
-        if (el.text) {
-          firstPage.drawText(String(el.text), { x: el.x, y: el.y, size: 11, color: rgb(0, 0, 0) });
-        }
-      });
-
-      // Signature and Date usually go on the last page
-      const lastPage = pages[pages.length - 1];
-      if (this.formData.signHere) {
-        lastPage.drawText(String(this.formData.signHere), { x: 68.49, y: 75.55, size: 11, color: rgb(0, 0, 0) });
-      }
-      if (this.formData.date) {
-        lastPage.drawText(String(this.formData.date), { x: 116.22, y: 75.55, size: 11, color: rgb(0, 0, 0) });
-      }
-
-      // 5. Save the PDF
-      const pdfBytes = await pdfDoc.save();
-
-      // 6. Trigger the download
-      const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'Filled_Propane_Agreement.pdf';
-      link.click();
-
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('An error occurred while generating the PDF. Check console.');
+      // Start generation
+      this.generatePDF(dataToSubmit, false);
+      
+      // Immediately show success view as requested
+      this.formSubmittedSuccessfully = true;
+      this.resetForm(form);
+    } catch (e) {
+      console.error(e);
+      alert('Error during submission. Please check your connection.');
+    } finally {
+      this.isGeneratingPdf = false;
     }
   }
 
-  resetForm() {
+  async generatePDF(data: any, showModal: boolean = true) {
+    try {
+      const apiUrl = 'http://localhost:3000/api/generate-pdf';
+      
+      const blob = await firstValueFrom(
+        this.http.post(apiUrl, data, { responseType: 'blob' }).pipe(
+          timeout(15000) // 15 seconds timeout
+        )
+      );
+
+      const blobUrl = window.URL.createObjectURL(blob);
+      this.rawBlobUrl = blobUrl;
+      this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
+      
+      if (showModal) {
+        this.showPdfModal = true;
+      }
+    } catch (error) {
+      console.error('PDF Generation Error:', error);
+      // If it fails, we still let the user know if they try to view it
+      this.pdfUrl = null;
+    }
+  }
+
+  openPreview() {
+    if (this.rawBlobUrl) {
+      window.open(this.rawBlobUrl, '_blank');
+    } else {
+      alert('PDF is still being generated or failed. Please wait a moment and try again.');
+    }
+  }
+
+  resetForNewForm() {
+    this.formSubmittedSuccessfully = false;
+    this.showWarningModal = true;
+    this.pdfUrl = null;
+    this.rawBlobUrl = null;
+  }
+
+  closePdfModal() {
+    this.showPdfModal = false;
+    this.pdfUrl = null;
+  }
+
+  resetForm(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
     this.formData = {
       saasoapId: '',
       primaryUser: '',
@@ -333,6 +327,7 @@ export class PropaneFormComponent {
       billingState: '',
       billingZipcode: '',
       payableContactEmail: '',
+      payableUser: '',
       agreeTerms: false,
       signHere: '',
       date: '',

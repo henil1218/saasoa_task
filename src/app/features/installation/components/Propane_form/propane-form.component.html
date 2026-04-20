@@ -28,7 +28,7 @@
         <h2 class="card-title">Propane Document Information</h2>
       </div>
 
-      <form class="propane-form" (ngSubmit)="onSubmit()">
+      <form *ngIf="!formSubmittedSuccessfully" class="propane-form" #propaneForm="ngForm" (ngSubmit)="onSubmit(propaneForm)">
 
         <!-- Row 1: SAASOA ID + Primary User -->
         <div class="form-row-2">
@@ -76,8 +76,39 @@
                    name="einNumber" placeholder="Enter EIN number" required />
           </div>
         </div>
+        <!-- Row 4: Primary Contact + Store Address -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="primaryContact">Primary Contact</label>
+            <input id="primaryContact" type="text" [(ngModel)]="formData.primaryUser" name="primaryContact" />
+          </div>
+          <div class="form-group">
+            <label for="storeAddress">Store Address *</label>
+            <input id="storeAddress" type="text" [(ngModel)]="formData.billingAddress" name="storeAddress" placeholder="Enter store address" required />
+          </div>
+        </div>
 
-        <!-- Row 4: Email (full width) -->
+        <!-- Row 5: Phone + City + State + Zip -->
+        <div class="form-row-phone-city-state-zip">
+          <div class="form-group">
+            <label for="primaryPhone">Phone</label>
+            <input id="primaryPhone" type="tel" [(ngModel)]="formData.payableContactPhone" name="primaryPhone" />
+          </div>
+          <div class="form-group">
+            <label for="primaryCity">City *</label>
+            <input id="primaryCity" type="text" [(ngModel)]="formData.billingCity" name="primaryCity" placeholder="City" required />
+          </div>
+          <div class="form-group">
+            <label for="primaryState">State *</label>
+            <input id="primaryState" type="text" [(ngModel)]="formData.billingState" name="primaryState" placeholder="State" required />
+          </div>
+          <div class="form-group">
+            <label for="primaryZip">Zip *</label>
+            <input id="primaryZip" type="text" [(ngModel)]="formData.billingZipcode" name="primaryZip" placeholder="Zip" required />
+          </div>
+        </div>
+
+        <!-- Row 6: Email -->
         <div class="form-row-1">
           <div class="form-group">
             <label for="email">Email</label>
@@ -87,27 +118,52 @@
         </div>
 
         <!-- Checkboxes Row -->
-        <div class="checkboxes-row">
-          <label class="checkbox-label">
-            <input type="checkbox" [(ngModel)]="formData.billingInfoSame"
-                   name="billingInfoSame" (change)="onBillingInfoSameChange()" />
-            <span class="checkmark"></span>
-            Billing information is the same As above
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" [(ngModel)]="formData.payableContactInfoSame"
-                   name="payableContactInfoSame" (change)="onPayableContactInfoSameChange()" />
-            <span class="checkmark"></span>
-            Payable Contact information is the same As above
-          </label>
+        <div class="checkboxes-row-custom">
+          <div class="checkbox-col">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="formData.billingInfoSame"
+                     name="billingInfoSame" (change)="onBillingInfoSameChange()" />
+              <span class="checkmark"></span>
+              Billing information is the same As above
+            </label>
+          </div>
+          <div class="checkbox-col">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="formData.payableContactInfoSame"
+                     name="payableContactInfoSame" (change)="onPayableContactInfoSameChange()" />
+              <span class="checkmark"></span>
+              Payable Contact information is the same As above
+            </label>
+          </div>
         </div>
 
-        <!-- Billing + Payable Contact Side by Side -->
+        <!-- Billing Email + Payable User Dropdown Row -->
         <div class="form-row-2">
           <div class="form-group">
             <label for="billingEmailAddress">Billing Email Address *</label>
             <input id="billingEmailAddress" type="email" [(ngModel)]="formData.billingEmailAddress"
                    name="billingEmailAddress" placeholder="billing@example.com" required />
+          </div>
+          <div class="form-group">
+            <div class="dropdown-inline-wrapper" *ngIf="!formData.payableContactInfoSame">
+              <label for="payableUser">Select Account Payable User *</label>
+              <div class="select-wrapper">
+                <select id="payableUser" [(ngModel)]="formData.payableUser"
+                        name="payableUser" (ngModelChange)="onPayableUserChange()">
+                  <option value="">Select Payable User</option>
+                  <option *ngFor="let u of primaryUserOptions" [value]="u">{{ u }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Address + Payable Contact Name Row -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="billingAddress">Billing Address *</label>
+            <input id="billingAddress" type="text" [(ngModel)]="formData.billingAddress"
+                   name="billingAddress" placeholder="Enter billing address" required />
           </div>
           <div class="form-group">
             <label for="payableContactName">Payable Contact Name *</label>
@@ -116,23 +172,9 @@
           </div>
         </div>
 
-        <div class="form-row-2">
-          <div class="form-group">
-            <label for="billingAddress">Billing Address *</label>
-            <input id="billingAddress" type="text" [(ngModel)]="formData.billingAddress"
-                   name="billingAddress" placeholder="Enter billing address" required />
-          </div>
-          <div class="form-group">
-            <label for="payableContactPhone">Payable Contact Phone *</label>
-            <input id="payableContactPhone" type="tel" [(ngModel)]="formData.payableContactPhone"
-                   name="payableContactPhone" placeholder="Enter phone number" required />
-          </div>
-        </div>
-
-        <!-- Billing City/State/Zip + Payable Contact Email -->
-        <div class="form-row-2">
-          
-          <div class="billing-location-row">
+        <!-- Billing City/State/Zip + Payable Contact Phone Row -->
+        <div class="form-row-billing-details">
+          <div class="billing-details-left">
             <div class="form-group">
               <label for="billingCity">Billing City *</label>
               <input id="billingCity" type="text" [(ngModel)]="formData.billingCity"
@@ -149,12 +191,21 @@
                      name="billingZipcode" placeholder="Zipcode" required />
             </div>
           </div>
+          <div class="form-group">
+            <label for="payableContactPhone">Payable Contact Phone *</label>
+            <input id="payableContactPhone" type="tel" [(ngModel)]="formData.payableContactPhone"
+                   name="payableContactPhone" placeholder="Enter phone number" required />
+          </div>
+        </div>
 
+        <!-- Payable Contact Email Row -->
+        <div class="form-row-2">
           <div class="form-group">
             <label for="payableContactEmail">Payable Contact Email *</label>
             <input id="payableContactEmail" type="email" [(ngModel)]="formData.payableContactEmail"
                    name="payableContactEmail" placeholder="payable@example.com" required />
           </div>
+          <div></div> <!-- Spacer -->
         </div>
 
         <!-- Terms & Conditions -->
@@ -237,13 +288,29 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="form-actions">
-          <button type="submit" class="btn-submit" id="addToStoreDocuments">
-            ADD TO STORE DOCUMENTS
+        <div class="form-actions-row">
+          <button type="submit" class="btn-submit" id="addToStoreDocuments" [disabled]="isGeneratingPdf">
+            {{ isGeneratingPdf ? 'GENERATING PDF...' : 'ADD TO STORE DOCUMENTS' }}
           </button>
         </div>
 
       </form>
+
+      <!-- Success View (shown after form submission) -->
+      <div class="success-view" *ngIf="formSubmittedSuccessfully">
+        <div class="success-icon">✓</div>
+        <h2 class="success-msg">Document Submitted Successfully!</h2>
+        <p class="success-sub">Your document has been added to the store documents.</p>
+        
+        <div class="success-actions-vertical">
+          <button type="button" class="btn-view-pdf-large" (click)="openPreview()">
+            VIEW PDF PREVIEW
+          </button>
+          <button type="button" class="btn-new-form-link" (click)="resetForNewForm()">
+            + FILL ANOTHER NEW FORM
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
