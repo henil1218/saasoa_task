@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const db = require('./database'); // Import database module
 
 // Initialize Express application
 const app = express();
@@ -20,7 +21,7 @@ app.get('/api/health', (req, res) => {
 
 const fs = require('fs');
 const path = require('path');
-const { PDFDocument, rgb } = require('pdf-lib');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 // Define the port, defaulting to 3000 if not provided in environment variables
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,14 @@ app.post('/api/generate-pdf', async (req, res) => {
     try {
         const formData = req.body; //payload
         console.log('Received PDF generation request for:', formData.saasoapId);
+
+        // Save data to SQLite database
+        try {
+            await db.insertSubmission(formData);
+            console.log('Data saved to database successfully');
+        } catch (dbError) {
+            console.error('Failed to save data to database:', dbError);
+        }
 
         // 1. Fetch PDF from the public folder
         const pdfPath = path.join(__dirname, '../public/SaasoaPropane2025_V2.pdf');
@@ -49,14 +58,14 @@ app.post('/api/generate-pdf', async (req, res) => {
             { name: 'EIN Number', text: formData.einNumber, x: 85.97, y: 520.26 },
             { name: 'Sales Tax', text: formData.salesTax, x: 413.1, y: 518.8 },
 
-            { name: 'Store Address', text: formData.billingAddress, x: 83.79, y: 499.13 },
+            { name: 'Store Address', text: formData.storeAddress, x: 83.79, y: 499.13 },
             { name: 'Primary Contact', text: formData.primaryUser, x: 383.96, y: 498.4 },
-            { name: 'Primary Contact Phone', text: formData.payableContactPhone, x: 343.16, y: 480.91 },
-            { name: 'Store City', text: formData.billingCity, x: 47.36, y: 453.96 },
-            { name: 'Store State', text: formData.billingState, x: 182.87, y: 454.69 },
-            { name: 'Store Zip', text: formData.billingZipcode, x: 249.9, y: 453.96 },
+            { name: 'Primary Contact Phone', text: formData.storePhone, x: 343.16, y: 480.91 },
+            { name: 'Store City', text: formData.storeCity, x: 47.36, y: 453.96 },
+            { name: 'Store State', text: formData.storeState, x: 182.87, y: 454.69 },
+            { name: 'Store Zip', text: formData.storeZipcode, x: 249.9, y: 453.96 },
             { name: 'Store Email', text: formData.email, x: 343.16, y: 454.69 },
-
+            
             { name: 'Accounts Payable Contact', text: formData.payableContactName, x: 424.39, y: 426.59 },
             { name: 'Billing Email', text: formData.billingEmailAddress, x: 130.41, y: 408.06 },
             { name: 'Billing Address', text: formData.billingAddress, x: 91.8, y: 389.85 },
@@ -68,23 +77,22 @@ app.post('/api/generate-pdf', async (req, res) => {
 
             { name: 'Service Type Text', text: formData.propaneServiceType, x: 314.01, y: 354.15 },
             { name: 'Exchange Price', text: formData.exchangePrice, x: 274.31, y: 251.74 },
-            { name: 'Purchase Price', text: formData.purchasePrice, x: 357.36, y: 252.47 },
-            { name: 'Payment Method Text', text: formData.paymentMethod, x: 560.64, y: 159.95 }
+            { name: 'Purchase Price', text: formData.purchasePrice, x: 357.36, y: 252.47 }
         ];
 
         // Payment method checkboxes logic
         if (formData.paymentMethod) {
             if (formData.paymentMethod.includes('POD')) {
-                textElements.push({ name: 'Payment: POD Mark', text: 'X', x: 513.28, y: 213.13 });
+                textElements.push({ name: 'Payment: POD Mark', text: 'tick', x: 430, y: 206, isTick: true });
             }
             if (formData.paymentMethod.includes('Bank Draft')) {
-                textElements.push({ name: 'Payment: Bank Draft Mark', text: 'X', x: 487.05, y: 194.19 });
+                textElements.push({ name: 'Payment: Bank Draft Mark', text: 'tick', x: 430, y: 192, isTick: true });
             }
             if (formData.paymentMethod.includes('Credit Card')) {
-                textElements.push({ name: 'Payment: Card on File Mark', text: 'X', x: 36.43, y: 197.51 });
+                textElements.push({ name: 'Payment: Card on File Mark', text: 'tick', x: 430, y: 175, isTick: true });
             }
             if (formData.paymentMethod.includes('Credit (')) {
-                textElements.push({ name: 'Payment: Credit Mark', text: 'X', x: 35.7, y: 172.74 });
+                textElements.push({ name: 'Payment: Credit Mark', text: 'tick', x: 430, y: 160, isTick: true });
             }
         }
         
@@ -104,12 +112,40 @@ app.post('/api/generate-pdf', async (req, res) => {
         // Print elements on the first page
         textElements.forEach(el => {
             if (el.text) {
-                firstPage.drawText(String(el.text), { x: el.x, y: el.y, size: 11, color: rgb(0, 0, 0) });
+                if (el.isTick) {
+                    // Draw a tick mark using two lines
+                    const tickX = el.x;
+                    const tickY = el.y;
+                    
+                    // First short line of the tick
+                    firstPage.drawLine({
+                        start: { x: tickX, y: tickY + 4 },
+                        end: { x: tickX + 3, y: tickY },
+                        thickness: 2,
+                        color: rgb(0, 0, 0),
+                    });
+                    
+                    // Second longer line of the tick
+                    firstPage.drawLine({
+                        start: { x: tickX + 3, y: tickY },
+                        end: { x: tickX + 8, y: tickY + 8 },
+                        thickness: 2,
+                        color: rgb(0, 0, 0),
+                    });
+                } else {
+                    firstPage.drawText(String(el.text), { x: el.x, y: el.y, size: 11, color: rgb(0, 0, 0) });
+                }
             }
         });
 
         // Signature and Date on the 2nd page
         const secondPage = pages[1];
+        
+        // Printed Name (Primary Contact)
+        if (formData.primaryUser) {
+            secondPage.drawText(String(formData.primaryUser), { x: 80.46, y: 84.59, size: 11, color: rgb(0, 0, 0) });
+        }
+
         if (formData.signHere) {
             secondPage.drawText(String(formData.signHere), { x: 24.41, y: 64.59, size: 11, color: rgb(0, 0, 0) });
         }
@@ -127,8 +163,22 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     } catch (error) {
         console.error('Error generating PDF:', error);
-        console.error('PDF Generation Error:', error);
-        res.status(500).json({ error: 'Failed to generate PDF' });
+        res.status(500).json({ 
+            error: 'Failed to generate PDF', 
+            details: error.message,
+            stack: error.stack 
+        });
+    }
+});
+
+// New route to view all submissions
+app.get('/api/submissions', async (req, res) => {
+    try {
+        const submissions = await db.getAllSubmissions();
+        res.status(200).json(submissions);
+    } catch (error) {
+        console.error('Error fetching submissions:', error);
+        res.status(500).json({ error: 'Failed to fetch submissions' });
     }
 });
 
