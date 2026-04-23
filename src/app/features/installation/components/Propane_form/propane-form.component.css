@@ -44,14 +44,44 @@
   padding: 2.5rem 3rem 4rem;
 }
 
-/* ---- Card Title ---- */
+/* ---- Card Title & Tabs ---- */
+.card-tabs-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #777;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: #333;
+  background: #f8f9fa;
+}
+
+.tab-btn.active {
+  color: #f5a623;
+  border-bottom-color: #f5a623;
+  background: transparent;
+}
+
 .card-title-row {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #eaeaea;
 }
 
 .back-btn {
@@ -623,4 +653,64 @@ input::placeholder {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Store Details Table ---- */
+.details-tab-content {
+  animation: fadeIn 0.4s ease;
+}
+
+.table-container {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.submissions-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.submissions-table th {
+  text-align: left;
+  background: #f8f9fa;
+  color: #555;
+  font-weight: 600;
+  padding: 1rem;
+  border-bottom: 2px solid #eee;
+}
+
+.submissions-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  color: #444;
+}
+
+.submissions-table tr:hover {
+  background: #fcfcfc;
+}
+
+.btn-view-table {
+  background: #47cecc;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-view-table:hover {
+  background: #3bb5b3;
+}
+
+.no-data {
+  text-align: center;
+  padding: 3rem !important;
+  color: #999;
+  font-style: italic;
 }

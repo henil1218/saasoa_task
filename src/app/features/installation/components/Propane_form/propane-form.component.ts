@@ -34,6 +34,12 @@ interface PropaneFormData {
   propaneServiceType: string;
   exchangePrice: string;
   purchasePrice: string;
+  // New fields to decouple "above" section from "billing/payable" sections
+  storeAddress: string;
+  storePhone: string;
+  storeCity: string;
+  storeState: string;
+  storeZipcode: string;
 }
 
 @Component({
@@ -51,6 +57,10 @@ export class PropaneFormComponent {
   formSubmittedSuccessfully = false;
   pdfUrl: SafeResourceUrl | null = null;
   rawBlobUrl: string | null = null;
+
+  activeTab: string = 'form';
+  submissions: any[] = [];
+  isLoadingSubmissions: boolean = false;
 
   constructor(
     private router: Router, 
@@ -88,7 +98,12 @@ export class PropaneFormComponent {
     paymentMethod: '',
     propaneServiceType: '',
     exchangePrice: '',
-    purchasePrice: ''
+    purchasePrice: '',
+    storeAddress: '',
+    storePhone: '',
+    storeCity: '',
+    storeState: '',
+    storeZipcode: ''
   };
 
   primaryUserOptions = ['Roy Patel', 'Keri Patel', 'Mary Patel', 'Robert Patel'];
@@ -119,11 +134,23 @@ export class PropaneFormComponent {
       const user = this.userDatabase[this.formData.primaryUser];
       this.formData.email = user.email;
       
+      // Populate store fields (above section)
+      this.formData.storeAddress = user.address;
+      this.formData.storePhone = user.phone;
+      this.formData.storeCity = user.city;
+      this.formData.storeState = user.state;
+      this.formData.storeZipcode = user.zipcode;
+      
       // Auto-select checkboxes when primary user is selected
       this.formData.billingInfoSame = true;
       this.formData.payableContactInfoSame = true;
     } else {
       this.formData.email = '';
+      this.formData.storeAddress = '';
+      this.formData.storePhone = '';
+      this.formData.storeCity = '';
+      this.formData.storeState = '';
+      this.formData.storeZipcode = '';
       this.formData.billingInfoSame = false;
       this.formData.payableContactInfoSame = false;
     }
@@ -147,14 +174,11 @@ export class PropaneFormComponent {
 
   onBillingInfoSameChange() {
     if (this.formData.billingInfoSame) {
-      const user = this.formData.primaryUser ? this.userDatabase[this.formData.primaryUser] : null;
-      this.formData.billingEmailAddress = this.formData.email || (user ? user.email : '');
-      if (user) {
-        this.formData.billingAddress = user.address;
-        this.formData.billingCity = user.city;
-        this.formData.billingState = user.state;
-        this.formData.billingZipcode = user.zipcode;
-      }
+      this.formData.billingEmailAddress = this.formData.email;
+      this.formData.billingAddress = this.formData.storeAddress;
+      this.formData.billingCity = this.formData.storeCity;
+      this.formData.billingState = this.formData.storeState;
+      this.formData.billingZipcode = this.formData.storeZipcode;
     } else {
       this.formData.billingEmailAddress = '';
       this.formData.billingAddress = '';
@@ -167,11 +191,8 @@ export class PropaneFormComponent {
   onPayableContactInfoSameChange() {
     if (this.formData.payableContactInfoSame) {
       this.formData.payableContactName = this.formData.primaryUser;
-      const user = this.formData.primaryUser ? this.userDatabase[this.formData.primaryUser] : null;
-      this.formData.payableContactEmail = this.formData.email || (user ? user.email : '');
-      if (user) {
-        this.formData.payableContactPhone = user.phone;
-      }
+      this.formData.payableContactEmail = this.formData.email;
+      this.formData.payableContactPhone = this.formData.storePhone;
       this.formData.payableUser = this.formData.primaryUser;
     } else {
       this.formData.payableContactName = '';
@@ -248,7 +269,7 @@ export class PropaneFormComponent {
 
     try {
       // Start generation
-      this.generatePDF(dataToSubmit, false);
+      await this.generatePDF(dataToSubmit, false);
       
       // Immediately show success view as requested
       this.formSubmittedSuccessfully = true;
@@ -305,6 +326,31 @@ export class PropaneFormComponent {
     this.pdfUrl = null;
   }
 
+  async switchTab(tab: string) {
+    this.activeTab = tab;
+    if (tab === 'details') {
+      await this.fetchSubmissions();
+    }
+  }
+
+  async fetchSubmissions() {
+    this.isLoadingSubmissions = true;
+    try {
+      const apiUrl = 'http://localhost:3000/api/submissions';
+      this.submissions = await firstValueFrom(this.http.get<any[]>(apiUrl));
+    } catch (error) {
+      console.error('Error fetching submissions:', error);
+      alert('Failed to load store details.');
+    } finally {
+      this.isLoadingSubmissions = false;
+    }
+  }
+
+  viewPdf(id: number) {
+    const url = `http://localhost:3000/api/generate-pdf/${id}`;
+    window.open(url, '_blank');
+  }
+
   resetForm(form?: NgForm) {
     if (form) {
       form.resetForm();
@@ -334,7 +380,12 @@ export class PropaneFormComponent {
       paymentMethod: '',
       propaneServiceType: '',
       exchangePrice: '',
-      purchasePrice: ''
+      purchasePrice: '',
+      storeAddress: '',
+      storePhone: '',
+      storeCity: '',
+      storeState: '',
+      storeZipcode: ''
     };
   }
 
